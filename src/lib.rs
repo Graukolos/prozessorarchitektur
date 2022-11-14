@@ -1,6 +1,7 @@
 pub mod accumulator;
 pub mod queue;
 pub mod stack;
+pub mod register;
 
 pub trait Processor<ISA> {
     fn execute(&mut self, program: Vec<ISA>);
