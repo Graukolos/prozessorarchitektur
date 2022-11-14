@@ -1,8 +1,10 @@
+pub use accumulator::AccumulatorMachine;
 pub use queue::QueueMachine;
 pub use stack::StackMachine;
 
-mod stack;
+mod accumulator;
 mod queue;
+mod stack;
 
 pub enum Instruction {
     Ld(u8),
@@ -11,6 +13,10 @@ pub enum Instruction {
     Sub,
     Mul,
     Div,
+    AddAcc(u8),
+    SubAcc(u8),
+    MulAcc(u8),
+    DivAcc(u8),
 }
 
 pub type Program = Vec<Instruction>;

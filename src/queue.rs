@@ -46,6 +46,7 @@ impl Processor for QueueMachine {
                     let b = self.queue.pop_front().unwrap();
                     self.queue.push_back(a / b)
                 }
+                _ => {}
             }
         }
     }

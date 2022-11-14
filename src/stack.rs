@@ -44,6 +44,7 @@ impl Processor for StackMachine {
                     let b = self.stack.pop().unwrap();
                     self.stack.push(a / b)
                 }
+                _ => {}
             }
         }
     }

@@ -38,12 +38,12 @@ fn setup() -> (QueueMachine, Program) {
     let program = vec![
         Instruction::Ld(1),
         Instruction::Ld(2),
-        Instruction::Ld(4),
-        Instruction::Ld(5),
         Instruction::Add,
         Instruction::Ld(3),
-        Instruction::Sub,
+        Instruction::Ld(4),
+        Instruction::Ld(5),
         Instruction::Div,
+        Instruction::Sub,
         Instruction::Mul,
         Instruction::St(0),
     ];
