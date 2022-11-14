@@ -1,46 +1,48 @@
-use crate::{Instruction, Processor};
+use crate::Processor;
 
-pub struct AccumulatorMachine {
-    accumulator: Option<u32>,
+pub enum Instruction {
+    Ld(u8),
+    St(u8),
+    Add(u8),
+    Sub(u8),
+    Mul(u8),
+    Div(u8),
+}
+
+pub struct Machine {
+    accumulator: u32,
     mem: [u32; u8::MAX as usize],
 }
 
-impl AccumulatorMachine {
-    pub fn new() -> Self {
+impl Default for Machine {
+    fn default() -> Self {
         Self {
-            accumulator: None,
+            accumulator: 0,
             mem: [0; u8::MAX as usize],
         }
     }
 }
 
-impl Processor for AccumulatorMachine {
-    fn execute(&mut self, program: crate::Program) {
+impl Processor<Instruction> for Machine {
+    fn execute(&mut self, program: Vec<Instruction>) {
         for instruction in program {
             println!("{:?}", self.accumulator);
 
             match instruction {
-                Instruction::Ld(address) => self.accumulator = Some(self.mem[address as usize]),
-                Instruction::St(address) => {
-                    self.mem[address as usize] = self.accumulator.take().unwrap()
+                Instruction::Ld(address) => self.accumulator = self.mem[address as usize],
+                Instruction::St(address) => self.mem[address as usize] = self.accumulator,
+                Instruction::Add(address) => {
+                    self.accumulator += self.mem[address as usize];
                 }
-                Instruction::AddAcc(address) => {
-                    let a = self.mem[address as usize];
-                    self.accumulator = Some(self.accumulator.unwrap() + a);
+                Instruction::Sub(address) => {
+                    self.accumulator -= self.mem[address as usize];
                 }
-                Instruction::SubAcc(address) => {
-                    let a = self.mem[address as usize];
-                    self.accumulator = Some(self.accumulator.unwrap() - a);
+                Instruction::Mul(address) => {
+                    self.accumulator *= self.mem[address as usize];
                 }
-                Instruction::MulAcc(address) => {
-                    let a = self.mem[address as usize];
-                    self.accumulator = Some(self.accumulator.unwrap() * a);
+                Instruction::Div(address) => {
+                    self.accumulator /= self.mem[address as usize];
                 }
-                Instruction::DivAcc(address) => {
-                    let a = self.mem[address as usize];
-                    self.accumulator = Some(self.accumulator.unwrap() / a);
-                }
-                _ => {}
             }
         }
     }

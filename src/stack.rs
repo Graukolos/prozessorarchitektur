@@ -1,12 +1,21 @@
 use crate::Processor;
 
-pub struct StackMachine {
+pub enum Instruction {
+    Ld(u8),
+    St(u8),
+    Add,
+    Sub,
+    Mul,
+    Div,
+}
+
+pub struct Machine {
     stack: Vec<u32>,
     mem: [u32; u8::MAX as usize],
 }
 
-impl StackMachine {
-    pub fn new() -> Self {
+impl Default for Machine {
+    fn default() -> Self {
         Self {
             stack: Vec::new(),
             mem: [0; u8::MAX as usize],
@@ -14,37 +23,34 @@ impl StackMachine {
     }
 }
 
-impl Processor for StackMachine {
-    fn execute(&mut self, program: crate::Program) {
+impl Processor<Instruction> for Machine {
+    fn execute(&mut self, program: Vec<Instruction>) {
         for instruction in program {
             println!("{:?}", self.stack);
 
             match instruction {
-                crate::Instruction::Ld(address) => self.stack.push(self.mem[address as usize]),
-                crate::Instruction::St(address) => {
-                    self.mem[address as usize] = self.stack.pop().unwrap()
-                }
-                crate::Instruction::Add => {
+                Instruction::Ld(address) => self.stack.push(self.mem[address as usize]),
+                Instruction::St(address) => self.mem[address as usize] = self.stack.pop().unwrap(),
+                Instruction::Add => {
                     let a = self.stack.pop().unwrap();
                     let b = self.stack.pop().unwrap();
                     self.stack.push(a + b)
                 }
-                crate::Instruction::Sub => {
+                Instruction::Sub => {
                     let a = self.stack.pop().unwrap();
                     let b = self.stack.pop().unwrap();
                     self.stack.push(a - b)
                 }
-                crate::Instruction::Mul => {
+                Instruction::Mul => {
                     let a = self.stack.pop().unwrap();
                     let b = self.stack.pop().unwrap();
                     self.stack.push(a * b)
                 }
-                crate::Instruction::Div => {
+                Instruction::Div => {
                     let a = self.stack.pop().unwrap();
                     let b = self.stack.pop().unwrap();
                     self.stack.push(a / b)
                 }
-                _ => {}
             }
         }
     }

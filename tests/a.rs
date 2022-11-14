@@ -1,39 +1,38 @@
-use prozessorarchitektur::{Instruction, Processor, Program, StackMachine};
+use prozessorarchitektur::stack::{Instruction, Machine};
+use prozessorarchitektur::Processor;
 
 #[test]
 fn a1() {
-    let (mut stack_machine, program) = setup();
+    let (mut machine, program) = setup();
 
     let value = 1;
-    stack_machine.set(1, value);
-    stack_machine.set(2, value);
-    stack_machine.set(3, value);
-    stack_machine.set(4, value);
-    stack_machine.set(5, value);
+    machine.set(1, value);
+    machine.set(2, value);
+    machine.set(3, value);
+    machine.set(4, value);
+    machine.set(5, value);
+    machine.execute(program);
 
-    stack_machine.execute(program);
-
-    assert_eq!(0, stack_machine.get(0))
+    assert_eq!(0, machine.get(0))
 }
 
 #[test]
 fn a2() {
-    let (mut stack_machine, program) = setup();
+    let (mut machine, program) = setup();
 
     let value = 2;
-    stack_machine.set(1, value);
-    stack_machine.set(2, value);
-    stack_machine.set(3, value);
-    stack_machine.set(4, value);
-    stack_machine.set(5, 1);
+    machine.set(1, value);
+    machine.set(2, value);
+    machine.set(3, value);
+    machine.set(4, value);
+    machine.set(5, 1);
+    machine.execute(program);
 
-    stack_machine.execute(program);
-
-    assert_eq!(2, stack_machine.get(0))
+    assert_eq!(2, machine.get(0))
 }
 
-fn setup() -> (StackMachine, Program) {
-    let stack_machine = StackMachine::new();
+fn setup() -> (Machine, Vec<Instruction>) {
+    let machine = Machine::default();
 
     let program = vec![
         Instruction::Ld(3),
@@ -48,5 +47,5 @@ fn setup() -> (StackMachine, Program) {
         Instruction::St(0),
     ];
 
-    (stack_machine, program)
+    (machine, program)
 }

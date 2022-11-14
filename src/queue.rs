@@ -2,13 +2,22 @@ use std::collections::VecDeque;
 
 use crate::Processor;
 
-pub struct QueueMachine {
+pub enum Instruction {
+    Ld(u8),
+    St(u8),
+    Add,
+    Sub,
+    Mul,
+    Div,
+}
+
+pub struct Machine {
     queue: VecDeque<u32>,
     mem: [u32; u8::MAX as usize],
 }
 
-impl QueueMachine {
-    pub fn new() -> Self {
+impl Default for Machine {
+    fn default() -> Self {
         Self {
             queue: VecDeque::new(),
             mem: [0; u8::MAX as usize],
@@ -16,37 +25,36 @@ impl QueueMachine {
     }
 }
 
-impl Processor for QueueMachine {
-    fn execute(&mut self, program: crate::Program) {
+impl Processor<Instruction> for Machine {
+    fn execute(&mut self, program: Vec<Instruction>) {
         for instruction in program {
             println!("{:?}", self.queue);
 
             match instruction {
-                crate::Instruction::Ld(address) => self.queue.push_back(self.mem[address as usize]),
-                crate::Instruction::St(address) => {
+                Instruction::Ld(address) => self.queue.push_back(self.mem[address as usize]),
+                Instruction::St(address) => {
                     self.mem[address as usize] = self.queue.pop_front().unwrap()
                 }
-                crate::Instruction::Add => {
+                Instruction::Add => {
                     let a = self.queue.pop_front().unwrap();
                     let b = self.queue.pop_front().unwrap();
                     self.queue.push_back(a + b)
                 }
-                crate::Instruction::Sub => {
+                Instruction::Sub => {
                     let a = self.queue.pop_front().unwrap();
                     let b = self.queue.pop_front().unwrap();
                     self.queue.push_back(a - b)
                 }
-                crate::Instruction::Mul => {
+                Instruction::Mul => {
                     let a = self.queue.pop_front().unwrap();
                     let b = self.queue.pop_front().unwrap();
                     self.queue.push_back(a * b)
                 }
-                crate::Instruction::Div => {
+                Instruction::Div => {
                     let a = self.queue.pop_front().unwrap();
                     let b = self.queue.pop_front().unwrap();
                     self.queue.push_back(a / b)
                 }
-                _ => {}
             }
         }
     }

@@ -1,39 +1,40 @@
-use prozessorarchitektur::{Instruction, Processor, Program, QueueMachine};
+use prozessorarchitektur::Processor;
+use prozessorarchitektur::queue::{Instruction, Machine};
 
 #[test]
 fn b1() {
-    let (mut queue_machine, program) = setup();
+    let (mut machine, program) = setup();
 
     let value = 1;
-    queue_machine.set(1, value);
-    queue_machine.set(2, value);
-    queue_machine.set(3, value);
-    queue_machine.set(4, value);
-    queue_machine.set(5, value);
+    machine.set(1, value);
+    machine.set(2, value);
+    machine.set(3, value);
+    machine.set(4, value);
+    machine.set(5, value);
 
-    queue_machine.execute(program);
+    machine.execute(program);
 
-    assert_eq!(0, queue_machine.get(0))
+    assert_eq!(0, machine.get(0))
 }
 
 #[test]
 fn b2() {
-    let (mut queue_machine, program) = setup();
+    let (mut machine, program) = setup();
 
     let value = 2;
-    queue_machine.set(1, value);
-    queue_machine.set(2, value);
-    queue_machine.set(3, value);
-    queue_machine.set(4, value);
-    queue_machine.set(5, 1);
+    machine.set(1, value);
+    machine.set(2, value);
+    machine.set(3, value);
+    machine.set(4, value);
+    machine.set(5, 1);
 
-    queue_machine.execute(program);
+    machine.execute(program);
 
-    assert_eq!(2, queue_machine.get(0))
+    assert_eq!(2, machine.get(0))
 }
 
-fn setup() -> (QueueMachine, Program) {
-    let queue_machine = QueueMachine::new();
+fn setup() -> (Machine, Vec<Instruction>) {
+    let machine = Machine::default();
 
     let program = vec![
         Instruction::Ld(1),
@@ -48,5 +49,5 @@ fn setup() -> (QueueMachine, Program) {
         Instruction::St(0),
     ];
 
-    (queue_machine, program)
+    (machine, program)
 }
