@@ -1,6 +1,6 @@
-use prozessorarchitektur::Processor;
-use prozessorarchitektur::register::{Instruction, Machine};
 use prozessorarchitektur::register::Address::{Mem, Reg};
+use prozessorarchitektur::register::{Instruction, Machine};
+use prozessorarchitektur::Processor;
 
 #[test]
 fn d1() {

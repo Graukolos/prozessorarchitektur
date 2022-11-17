@@ -1,8 +1,8 @@
 pub mod accumulator;
-pub mod queue;
-pub mod stack;
-pub mod register;
 pub mod load_store;
+pub mod queue;
+pub mod register;
+pub mod stack;
 
 pub trait Processor<ISA> {
     fn execute(&mut self, program: Vec<ISA>);

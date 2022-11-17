@@ -1,5 +1,5 @@
-use prozessorarchitektur::Processor;
 use prozessorarchitektur::stack::{Instruction, Machine};
+use prozessorarchitektur::Processor;
 
 #[test]
 fn a1() {

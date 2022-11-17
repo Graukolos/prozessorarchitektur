@@ -1,5 +1,5 @@
-use prozessorarchitektur::Processor;
 use prozessorarchitektur::queue::{Instruction, Machine};
+use prozessorarchitektur::Processor;
 
 #[test]
 fn b1() {
